@@ -40,14 +40,14 @@ describe('POST /api/auth/register', () => {
   test('returns a status 201 Created', async () => {
     const res = await request(server)
       .post('/api/auth/register')
-      .send({ username: 'Vaporeon', password: '1234' })
+      .send({ username: 'Metaverse', password: '1234' })
     console.log(res)
     expect(res.status).toBe(201)
   })
   test('returns a status 422 Unprocessable Entity', async () => {
     const res = await request(server)
       .post('/api/auth/register')
-      .send({ username: 'Vaporeon' })
+      .send({ username: 'Metaverse' })
     expect(res.status).toBe(422)
   })
 })
@@ -56,13 +56,13 @@ describe('POST /api/auth/login', () => {
   test('returns a status 200 OK', async () => {
     const res = await request(server)
       .post('/api/auth/login')
-      .send({ username: 'Eevee', password: '1234' })
+      .send({ username: 'Whoopie', password: '1234' })
     expect(res.status).toBe(200)
   })
   test('returns a status 422 Unprocessable Entity', async () => {
     const res = await request(server)
       .post('/api/auth/login')
-      .send({ username: 'Eevee', password: '' })
+      .send({ username: 'Whoopie', password: '' })
     expect(res.status).toBe(422)
   })
 })
