@@ -3,12 +3,12 @@ const bcrypt = require('bcryptjs')
 const db = require('../../data/dbConfig')
 const tokenBuilder = require('./auth-token-builder')
 const {
-  checkUsernameExists,
+  checkUsernameLogin,
   checkBodyExists,
-  checkUsername
+  checkUsernameRegister
 } = require('../middleware/auth-middleware')
 
-router.post('/register', checkBodyExists, checkUsernameExists, async (req, res, next) => {
+router.post('/register', checkBodyExists, checkUsernameRegister, async (req, res, next) => {
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -35,14 +35,14 @@ router.post('/register', checkBodyExists, checkUsernameExists, async (req, res, 
       the response body should include a string exactly as follows: "username taken".
   */
       let user = req.body
-      const hash = bcrypt.hashSync(user.password, 8)
-      user.password = hash
-      const id  = await db('users').insert(user)
-      const User = await db('users').where('id', id).first()
-      res.status(201).json(User)
+  const hash = bcrypt.hashSync(user.password, 8)
+  user.password = hash
+  const id  = await db('users').insert(user)
+  const User = await db('users').where('id', id).first()
+  res.status(201).json(User)
 });
 
-router.post('/login', checkBodyExists, checkUsernameExists, async (req, res, next) => {
+router.post('/login', checkBodyExists, checkUsernameLogin, async (req, res, next) => {
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -66,7 +66,6 @@ router.post('/login', checkBodyExists, checkUsernameExists, async (req, res, nex
     4- On FAILED login due to `username` not existing in the db, or `password` being incorrect,
       the response body should include a string exactly as follows: "invalid credentials".
   */
-
       const { username, password } = req.body
       await db('users').where({ username })
         .then(([user]) => {
@@ -77,6 +76,8 @@ router.post('/login', checkBodyExists, checkUsernameExists, async (req, res, nex
             next({ status: 401, message: 'Invalid Credentials' })
           }
         })
+
+     
 });
 
 module.exports = router;
